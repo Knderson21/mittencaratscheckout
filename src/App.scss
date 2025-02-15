@@ -1,0 +1,26 @@
+@import 'src/constants/colors.scss';
+
+.appContainer {
+  height: 100svh;
+}
+
+.pageContainer {
+  background-color: $backgroundColor;
+  background-color: #FFECEC;
+  opacity: 0.8;
+  background-image:  linear-gradient(#F7CAC9 3.4000000000000004px, transparent 3.4000000000000004px), linear-gradient(90deg, #F7CAC9 3.4000000000000004px, transparent 3.4000000000000004px), linear-gradient(#F7CAC9 1.7000000000000002px, transparent 1.7000000000000002px), linear-gradient(90deg, #F7CAC9 1.7000000000000002px, #FFECEC 1.7000000000000002px);
+  background-size: 85px 85px, 85px 85px, 17px 17px, 17px 17px;
+  background-position: -3.4000000000000004px -3.4000000000000004px, -3.4000000000000004px -3.4000000000000004px, -1.7000000000000002px -1.7000000000000002px, -1.7000000000000002px -1.7000000000000002px;
+  color: $darkTextColor;
+
+
+}
+
+@media only screen and (min-width: 768px) {
+  .pageContainer {
+    > div {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  }
+}

@@ -1,0 +1,7 @@
+$headerHeight: 30px;
+$headerHeightDesktop: 50px;
+
+$footerHeight: 60px;
+
+$pageHeight: calc(100svh - $headerHeight - $footerHeight);
+$pageHeightDesktop: calc(100svh - $headerHeightDesktop - $footerHeight);

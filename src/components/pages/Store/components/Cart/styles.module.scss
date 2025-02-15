@@ -1,0 +1,53 @@
+@import 'src/constants/colors.scss';
+
+.cartContainer {
+  border: 3px solid $accentColor;
+  width: 100%;
+  border-radius: 15px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 100px;
+  width: 100%;
+  padding: 15px 20px 15px 20px;
+  margin-bottom: 10px;
+  // background-color: $cartBackgroundColor;
+  background-color: $inventoryBackgroundColor;
+  filter: drop-shadow(0px 15px 7px rgba(0, 0, 0, 0.3));
+  z-index: 1;
+}
+
+.cartTotal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  h1 {
+    font-size: 20px;
+    padding: 0;
+    margin: 0;
+    text-align: right;
+  }
+
+  h2 {
+    font-size: 28px;
+    margin: 0;
+  }
+}
+
+.cartList {
+  height: 100%;
+  overflow-y: auto;
+  font-size: 10px;
+
+  p {
+    margin: 0;
+  }
+
+  ul {
+    margin-top: 5px;
+    margin-bottom: 0;
+    padding-inline-start: 20px;
+  }
+}
