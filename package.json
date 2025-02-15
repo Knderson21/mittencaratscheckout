@@ -1,7 +1,6 @@
 {
-  "name": "potion-stock-manager",
-  "homepage": "https://oeponn.github.io/potion-stock-manager/",
-  "version": "0.1.0",
+  "name": "mitten-carats-checkout",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "@react-oauth/google": "^0.12.1",

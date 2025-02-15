@@ -24,7 +24,7 @@ const Login = ({
   const insertTitleRow = () => {
     const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}:append?valueInputOption=USER_ENTERED`;
     if (!token) {
-      console.log('no token!');
+      console.log('Oh nyooo! There\'s nyo token :(');
       return;
     }
 
