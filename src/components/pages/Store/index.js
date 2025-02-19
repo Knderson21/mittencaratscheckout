@@ -59,6 +59,32 @@ const PaymentMethod = ({
         </label>
 
         <label
+          className={radioClassName(paymentMethod, 'apple cash')}
+        >
+          <input
+            type="radio"
+            name="payment"
+            value="apple cash"
+            checked={paymentMethod === 'apple cash'}
+            onChange={() => setPaymentMethod('apple cash')}
+          />
+          AppleCash
+        </label>
+
+        <label
+          className={radioClassName(paymentMethod, 'cash app')}
+        >
+          <input
+            type="radio"
+            name="payment"
+            value="cash app"
+            checked={paymentMethod === 'cash app'}
+            onChange={() => setPaymentMethod('cash app')}
+          />
+          CashApp
+        </label>
+
+        <label
           className={radioClassName(paymentMethod, 'zelle')}
         >
           <input
@@ -68,7 +94,7 @@ const PaymentMethod = ({
             checked={paymentMethod === 'zelle'}
             onChange={() => setPaymentMethod('zelle')}
           />
-        Zelle
+          Zelle
         </label>
       </form>
       <div className={styles.inputWrapper}>
@@ -76,7 +102,7 @@ const PaymentMethod = ({
           type="text"
           rows="1"
           name="reference"
-          placeholder="Reference"
+          placeholder="Cashier (Your Name)"
           value={reference}
           onChange={(event) => setReference(event.target.value)}
         />
@@ -85,7 +111,7 @@ const PaymentMethod = ({
           rows="2"
           type="text"
           name="notes"
-          placeholder="Notes"
+          placeholder="Notes (optional)"
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
         />
