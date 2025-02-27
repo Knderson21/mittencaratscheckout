@@ -1,13 +1,17 @@
 {
   "name": "mitten-carats-checkout",
   "version": "0.0.1",
+  "homepage": "https://knderson21.github.io/mittencaratscheckout/",
   "private": true,
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d build",
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "eslint-config-google": "^0.14.0",
+    "gh-pages": "^6.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1",
