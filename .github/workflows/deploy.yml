@@ -30,6 +30,7 @@ jobs:
       id: deployment
       uses: actions/upload-pages-artifact@v3
       with:
+        name: "mittencarat"
         path: build
     
   # Deployment job
@@ -43,5 +44,6 @@ jobs:
       - name: Deploy to GH Pages
         uses: actions/deploy-pages@v4
         with:
+          artifact_name: "mittencarat"
           token: ${{ secrets.GITHUB_TOKEN }}
   
