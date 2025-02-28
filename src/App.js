@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import {useEffect, useState} from 'react';
-import {Routes, Route, BrowserRouter} from 'react-router-dom';
+import {Routes, Route, HashRouter} from 'react-router-dom';
 import {Login, Header, Store} from './components/pages';
 import storedInventory from './constants/inventory.json';
 
@@ -17,9 +17,9 @@ const App = () => {
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [loading, setLoading] = useState(false);
 
-  const basename = process.env.NODE_ENV === 'production' ? '/potion-stock-manager' : '';
+  const basename = '/';
+  // const basename = process.env.NODE_ENV === 'production' ? '/' : '';
   // const basename = process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : '';
-
 
   useEffect(() => {
     setInventory({...storedInventory});
@@ -106,7 +106,7 @@ const App = () => {
 
   if (!token) {
     return (
-      <BrowserRouter basename={basename}>
+      <HashRouter basename={basename}>
         <Routes>
           <Route
             path="/*"
@@ -123,7 +123,7 @@ const App = () => {
             />}
           />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     );
   }
 
@@ -207,7 +207,7 @@ const App = () => {
     <div
       className="appContainer"
     >
-      <BrowserRouter basename={basename}>
+      <HashRouter basename={basename}>
         <div className="pageContainer">
           <Header />
           <Routes>
@@ -250,8 +250,7 @@ const App = () => {
             <Route path='/test' element={<div>Test</div>} />
           </Routes>
         </div>
-      </BrowserRouter>
-
+      </HashRouter>
     </div>
   );
 };
