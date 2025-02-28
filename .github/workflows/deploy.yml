@@ -19,13 +19,12 @@ jobs:
       with:
         node-version: 20
         cache: 'npm'
-    - name: Grab Environment Variables
-      run: |
-          export REACT_APP_OAUTH_CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}
     - name: Install dependencies
       run: npm ci
     - name: Build
       run: npm run build
+      env:
+        REACT_APP_OAUTH_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
     - name: Set Artifact
       id: deployment
       uses: actions/upload-pages-artifact@v3
