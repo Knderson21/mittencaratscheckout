@@ -1,8 +1,8 @@
 {
   "name": "mitten-carats-checkout",
   "version": "0.0.1",
-  "homepage": "https://knderson21.github.io/mittencaratscheckout/",
-  "private": true,
+  "homepage": "./",
+  "private": false,
   "predeploy": "npm run build",
   "deploy": "gh-pages -d build",
   "dependencies": {
