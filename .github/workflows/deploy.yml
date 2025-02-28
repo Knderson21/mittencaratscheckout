@@ -8,6 +8,7 @@ on:
     branches: [ "main" ]
 
 jobs:
+  # Building job
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -23,7 +24,18 @@ jobs:
         cache: 'npm'
     - run: |
           export OAUTH_CLIENT_ID=${{secrets.OAUTH_CLIENT_ID}}
-    - run: npm install
     - run: npm ci
     - run: npm run build
-    #- run: npm test
+    
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
+  
