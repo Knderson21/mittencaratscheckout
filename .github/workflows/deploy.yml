@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         node-version: ['20.5.1']
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
@@ -27,9 +27,9 @@ jobs:
     - run: npm ci
     - run: npm run build
     - id: deployment
-      uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
+      uses: actions/upload-pages-artifact@v3
       with:
-        path: build_outputs_folder/
+        path: build/
     
   # Deployment job
   deploy:
