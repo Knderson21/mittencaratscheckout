@@ -7,11 +7,11 @@ const Header = () => {
     <div className={styles.container}>
       <div className={styles.navContainer}>
         <NavLink
-          to="/settings"
+          to="/login"
           exact={'true'}
           className={({isActive}) => isActive ? [styles.activeLink, styles.navLink].join(' ') : styles.navLink}
         >
-          <div>Settings</div>
+          <div>Login</div>
         </NavLink>
         <NavLink
           to="/"

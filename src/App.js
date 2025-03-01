@@ -10,32 +10,20 @@ const App = () => {
   const [token, setToken] = useState('');
   const [inventory, setInventory] = useState({});
   const [cart, setCart] = useState({});
-  const [sheetId, setSheetId] = useState('');
-  const [sheetName, setSheetName] = useState('');
+  const [sheetId] = useState(process.env.SHEET_ID);
+  const [sheetName] = useState(process.env.SHEET_NAME);
   const [reference, setReference] = useState('');
   const [notes, setNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [loading, setLoading] = useState(false);
 
-  const basename = '/';
-  // const basename = process.env.NODE_ENV === 'production' ? '/' : '';
-  // const basename = process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : '';
-
   useEffect(() => {
     setInventory({...storedInventory});
-    const storedSheetId = localStorage.getItem('potionSheetId');
-    const storedSheetName = localStorage.getItem('potionSheetName');
     const storedPaymentMethod = localStorage.getItem('potionPaymentMethod');
     const storedNotes = localStorage.getItem('potionNotes');
     const storedReference = localStorage.getItem('potionReference');
     const storedToken = localStorage.getItem('potionToken');
 
-    // console.log('storedSheetId', storedSheetId, typeof storedSheetId);
-    // console.log('storedSheetName', storedSheetName, typeof storedSheetName);
-    // console.log('storedPaymentMethod', storedPaymentMethod, typeof storedPaymentMethod);
-
-    if (storedSheetId) setSheetId(storedSheetId);
-    if (storedSheetName) setSheetName(storedSheetName);
     if (storedPaymentMethod) setPaymentMethod(storedPaymentMethod);
     if (storedNotes) setNotes(storedNotes);
     if (storedReference) setReference(storedReference);
@@ -46,14 +34,6 @@ const App = () => {
     if (Object.keys(cart).length === 0) return;
     localStorage.setItem('potionCart', JSON.stringify(cart));
   }, [cart]);
-
-  useEffect(() => {
-    localStorage.setItem('potionSheetId', sheetId);
-  }, [sheetId]);
-
-  useEffect(() => {
-    localStorage.setItem('potionSheetName', sheetName);
-  }, [sheetName]);
 
   useEffect(() => {
     localStorage.setItem('potionPaymentMethod', paymentMethod);
@@ -106,20 +86,13 @@ const App = () => {
 
   if (!token) {
     return (
-      <HashRouter basename={basename}>
+      <HashRouter basename='/'>
         <Routes>
           <Route
-            path="/*"
+            path="/login"
             element={<Login
-              potions={potions}
-              cart={cart}
               token={token}
-              sheetId={sheetId}
-              sheetName={sheetName}
-              setCart={setCart}
               setToken={setToken}
-              setSheetId={setSheetId}
-              setSheetName={setSheetName}
             />}
           />
         </Routes>
@@ -175,10 +148,6 @@ const App = () => {
         .then((response) => {
           if (!response.ok) {
             setToken('');
-            // if (response.status === 401) {
-            //   setToken('');
-            //   throw new Error('Unauthorized access - possibly invalid token');
-            // }
             setLoading(false);
             throw new Error('Network response was not ok ' + response.statusText);
           }
@@ -204,10 +173,8 @@ const App = () => {
   };
 
   return (
-    <div
-      className="appContainer"
-    >
-      <HashRouter basename={basename}>
+    <div className="appContainer">
+      <HashRouter basename='/'>
         <div className="pageContainer">
           <Header />
           <Routes>
@@ -232,22 +199,10 @@ const App = () => {
               }
             />
             <Route
-              path='/settings'
+              path='/login'
               exact='true'
-              element={
-                <Login
-                  potions={potions}
-                  cart={cart}
-                  token={token}
-                  sheetId={sheetId}
-                  sheetName={sheetName}
-                  setCart={setCart}
-                  setToken={setToken}
-                  setSheetId={setSheetId}
-                  setSheetName={setSheetName}
-                />}
+              element={<Login token={token} setToken={setToken} />}
             />
-            <Route path='/test' element={<div>Test</div>} />
           </Routes>
         </div>
       </HashRouter>
