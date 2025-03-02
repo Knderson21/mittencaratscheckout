@@ -3,7 +3,6 @@ import {useEffect, useState} from 'react';
 import {Routes, Route, HashRouter} from 'react-router-dom';
 import {Login, Header, Store} from './components/pages';
 import storedInventory from './constants/inventory.json';
-
 import './App.scss';
 
 const App = () => {
