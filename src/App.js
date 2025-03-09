@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import {useEffect, useState} from 'react';
-import {Routes, Route, HashRouter} from 'react-router-dom';
-import {Login, Header, Store} from './components/pages';
+import {Routes, Route} from 'react-router-dom';
+import {Login, Header, Store} from './pages';
 import storedInventory from './constants/inventory.json';
 import './App.scss';
 
@@ -104,8 +104,7 @@ const App = () => {
       return;
     }
 
-    const timestamp = new Date();
-    const date = timestamp.toLocaleString('en-US', {
+    const date = new Date().toLocaleString('en-US', {
       year: 'numeric',
       month: 'numeric',
       day: 'numeric',

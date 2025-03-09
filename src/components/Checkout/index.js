@@ -7,13 +7,15 @@ const Checkout = ({appendSheetData, clearCart, loading}) => {
         className={styles.cancel}
         onClick={clearCart}
         disabled={loading}
-      >Cancel / Clear Cart
+      >
+        Clear Cart
       </button>
       <button
         className={styles.checkout}
         onClick={appendSheetData}
         disabled={loading}
-      >Checkout
+      >
+        Checkout
       </button>
     </div>
   );

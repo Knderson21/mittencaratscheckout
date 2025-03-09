@@ -1,4 +1,4 @@
-import {Cart, Inventory, Checkout, PaymentMethod} from './components';
+import {Cart, Inventory, Checkout, PaymentMethod} from '../../components';
 import styles from './styles.module.scss';
 
 const Store = ({
