@@ -85,7 +85,6 @@ const App = () => {
 
   if (!token) {
     return (
-      <HashRouter basename='/'>
         <Routes>
           <Route
             path="/login"
@@ -95,7 +94,6 @@ const App = () => {
             />}
           />
         </Routes>
-      </HashRouter>
     );
   }
 
@@ -173,7 +171,6 @@ const App = () => {
 
   return (
     <div className="appContainer">
-      <HashRouter basename='/'>
         <div className="pageContainer">
           <Header />
           <Routes>
@@ -204,7 +201,6 @@ const App = () => {
             />
           </Routes>
         </div>
-      </HashRouter>
     </div>
   );
 };
