@@ -1,20 +1,19 @@
 import { Cart, Inventory, Checkout, PaymentMethod } from "../../components";
+import { useAppContext } from "../../utils/appContext";
 import styles from "./styles.module.scss";
 
 const Store = ({
   cart,
   notes,
   potions,
-  paymentMethod,
-  reference,
   setCart,
-  appendSheetData,
   setNotes,
-  setPaymentMethod,
   setReference,
   totalPrice,
   loading,
 }) => {
+  const { reference, paymentMethod, setReference, setPaymentMethod } = useAppContext();
+
   if (!potions || !cart) {
     return null;
   }
@@ -47,7 +46,6 @@ const Store = ({
       </div>
       <Checkout
         clearCart={clearCart}
-        appendSheetData={appendSheetData}
         loading={loading}
       />
     </div>

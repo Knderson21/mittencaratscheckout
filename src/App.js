@@ -6,19 +6,11 @@ import { useAppContext } from "./utils/appContext";
 import { Login, Header, Store } from "./pages";
 import storedInventory from "./constants/inventory.json";
 import "./App.scss";
-import { date } from "./utils/tools";
-import { saveCart } from "./services/apiService";
 
 const App = () => {
-  const { token, setToken, totalPrice, setTotalPrice } = useAppContext();
+  const { token, paymentMethod, setToken, totalPrice, reference, setTotalPrice, setPaymentMethod, setNotes, setReference } = useAppContext();
   const [inventory, setInventory] = useState({});
   const [cart, setCart] = useState({});
-  const [sheetId] = useState(process.env.SHEET_ID);
-  const [sheetName] = useState(process.env.SHEET_NAME);
-  const [reference, setReference] = useState("");
-  const [notes, setNotes] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("cash");
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setInventory({ ...storedInventory });
@@ -79,8 +71,8 @@ const App = () => {
   }
 
   Object.keys(cart).forEach((key) => {
-    setTotalPrice((prevTotal) =>
-      (prevTotal + inventory.items[key].price * cart[key]),
+    setTotalPrice(
+      (prevTotal) => prevTotal + inventory.items[key].price * cart[key],
     );
   });
 
@@ -95,45 +87,6 @@ const App = () => {
     );
   }
 
-  const appendSheetData = async () => {
-    if (!window.confirm("Are you sure you want to checkout?")) {
-      return;
-    }
-
-    const values = [date, reference];
-
-    let totalQuantity = 0;
-    Object.keys(cart).forEach((key) => {
-      totalQuantity += cart[key];
-      values.push(`$${(inventory.items[key].price * cart[key]).toFixed(2)}`);
-      values.push(cart[key]);
-    });
-
-    if (totalQuantity === 0) {
-      window.alert("Cart is empty!");
-      return;
-    }
-
-    values.push(paymentMethod, `$${totalPrice}`, notes);
-
-    const body = {
-      values: [values],
-    };
-
-    await saveCart(body);
-
-    console.log("Clearing cart after successful response:", data);
-    const newCart = {};
-    Object.keys(inventory.items).forEach((key) => {
-      newCart[key] = 0;
-    });
-    setCart(newCart);
-    setPaymentMethod("cash");
-    setReference("");
-    setNotes("");
-    setLoading(false);
-  };
-
   return (
     <div className="appContainer">
       <div className="pageContainer">
@@ -147,15 +100,9 @@ const App = () => {
                 potions={inventory.items}
                 cart={cart}
                 notes={notes}
-                paymentMethod={paymentMethod}
-                reference={reference}
                 setCart={setCart}
                 setNotes={setNotes}
-                setPaymentMethod={setPaymentMethod}
-                setReference={setReference}
-                appendSheetData={appendSheetData}
                 totalPrice={totalPrice}
-                loading={loading}
               />
             }
           />
