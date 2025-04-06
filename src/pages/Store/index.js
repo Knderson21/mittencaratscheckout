@@ -1,5 +1,5 @@
-import {Cart, Inventory, Checkout, PaymentMethod} from '../../components';
-import styles from './styles.module.scss';
+import { Cart, Inventory, Checkout, PaymentMethod } from "../../components";
+import styles from "./styles.module.scss";
 
 const Store = ({
   cart,
@@ -19,15 +19,15 @@ const Store = ({
     return null;
   }
   const clearCart = () => {
-    if (window.confirm('Are you sure you want to clear cart?')) {
+    if (window.confirm("Are you sure you want to clear cart?")) {
       const newCart = {};
       Object.keys(potions).forEach((key) => {
         newCart[key] = 0;
       });
       setCart(newCart);
-      setPaymentMethod('cash');
-      setReference('');
-      setNotes('');
+      setPaymentMethod("cash");
+      setReference("");
+      setNotes("");
     }
   };
 

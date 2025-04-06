@@ -1,6 +1,6 @@
-import styles from './styles.module.scss';
+import styles from "./styles.module.scss";
 
-const Cart = ({cart, potions, totalPrice}) => {
+const Cart = ({ cart, potions, totalPrice }) => {
   return (
     <div className={styles.cartContainer}>
       <div className={styles.cartList}>

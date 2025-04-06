@@ -1,0 +1,43 @@
+@import "src/constants/colors.scss";
+@import "src/constants/dimensions.scss";
+
+.checkoutContainer {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-top: 2px solid $accentColor;
+  background-color: rgba($accentColor, 0.25);
+
+  button {
+    width: calc(50% - 10px);
+    height: 40px;
+    border-radius: 15px;
+    border: none;
+  }
+
+  button:disabled {
+    opacity: 50%;
+  }
+
+  .cancel {
+    font-weight: bold;
+    color: $accentColor;
+    color: $darkTextColor;
+    background-color: $backgroundColor;
+    border: 3px solid $potionBackgroundColor;
+    filter: drop-shadow(0px 5px 3px rgba(0, 0, 0, 0.3));
+  }
+
+  .checkout {
+    font-weight: bold;
+    color: $accentColor;
+    color: $darkTextColor;
+    background-color: $inventoryBackgroundColor;
+    border: 3px solid $accentColor;
+    filter: drop-shadow(0px 5px 3px rgba(0, 0, 0, 0.3));
+  }
+}

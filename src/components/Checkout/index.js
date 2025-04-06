@@ -1,13 +1,9 @@
-import styles from './styles.module.scss';
+import styles from "./styles.module.scss";
 
-const Checkout = ({appendSheetData, clearCart, loading}) => {
+const Checkout = ({ appendSheetData, clearCart, loading }) => {
   return (
     <div className={styles.checkoutContainer}>
-      <button
-        className={styles.cancel}
-        onClick={clearCart}
-        disabled={loading}
-      >
+      <button className={styles.cancel} onClick={clearCart} disabled={loading}>
         Clear Cart
       </button>
       <button

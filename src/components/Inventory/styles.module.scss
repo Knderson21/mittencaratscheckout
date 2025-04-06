@@ -1,4 +1,4 @@
-@import 'src/constants/colors.scss';
+@import "src/constants/colors.scss";
 
 .inventoryContainer {
   border: 3px solid $accentColor;
@@ -15,7 +15,7 @@
 
 .inventory {
   display: grid;
-  grid-auto-flow: column;  // This will ensure the grid fills column-wise
+  grid-auto-flow: column; // This will ensure the grid fills column-wise
   grid-template-rows: repeat(2, 150px); // Exactly two rows
   gap: 15px; // Space between items
   overflow-x: auto;

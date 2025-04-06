@@ -1,7 +1,7 @@
-import Potion from '../Potion';
-import styles from './styles.module.scss';
+import Potion from "../Potion";
+import styles from "./styles.module.scss";
 
-const Inventory = ({cart, potions, setCart}) => {
+const Inventory = ({ cart, potions, setCart }) => {
   return (
     <div className={styles.inventoryContainer}>
       <div className={styles.inventory}>

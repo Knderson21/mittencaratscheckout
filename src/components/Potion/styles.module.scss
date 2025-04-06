@@ -1,4 +1,4 @@
-@import 'src/constants/colors.scss';
+@import "src/constants/colors.scss";
 
 .potion {
   position: relative;
@@ -54,8 +54,8 @@
 
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     input {
@@ -66,8 +66,9 @@
       color: $darkTextColor;
     }
 
-    .subtract, .add {
-      -webkit-user-select: none; /* Safari */        
+    .subtract,
+    .add {
+      -webkit-user-select: none; /* Safari */
       -moz-user-select: none; /* Firefox */
       -ms-user-select: none; /* IE10+/Edge */
       user-select: none; /* Standard */
