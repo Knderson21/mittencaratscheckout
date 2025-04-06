@@ -1,12 +1,16 @@
-/* eslint-disable max-len */
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
+
+// Local imports
+import { useAppContext } from "./utils/appContext";
 import { Login, Header, Store } from "./pages";
 import storedInventory from "./constants/inventory.json";
 import "./App.scss";
+import { date } from "./utils/tools";
+import { saveCart } from "./services/apiService";
 
 const App = () => {
-  const [token, setToken] = useState("");
+  const { token, setToken, totalPrice, setTotalPrice } = useAppContext();
   const [inventory, setInventory] = useState({});
   const [cart, setCart] = useState({});
   const [sheetId] = useState(process.env.SHEET_ID);
@@ -74,13 +78,11 @@ const App = () => {
     return null;
   }
 
-  const potions = inventory.items;
-  let totalPrice = 0;
   Object.keys(cart).forEach((key) => {
-    totalPrice += potions[key].price * cart[key];
+    setTotalPrice((prevTotal) =>
+      (prevTotal + inventory.items[key].price * cart[key]),
+    );
   });
-
-  totalPrice = totalPrice.toFixed(2);
 
   if (!token) {
     return (
@@ -93,28 +95,17 @@ const App = () => {
     );
   }
 
-  const appendSheetData = () => {
-    const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}:append?valueInputOption=USER_ENTERED`;
-
+  const appendSheetData = async () => {
     if (!window.confirm("Are you sure you want to checkout?")) {
       return;
     }
-
-    const date = new Date().toLocaleString("en-US", {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true, // Set to false if you want 24-hour time format
-    });
 
     const values = [date, reference];
 
     let totalQuantity = 0;
     Object.keys(cart).forEach((key) => {
       totalQuantity += cart[key];
-      values.push(`$${(potions[key].price * cart[key]).toFixed(2)}`);
+      values.push(`$${(inventory.items[key].price * cart[key]).toFixed(2)}`);
       values.push(cart[key]);
     });
 
@@ -128,40 +119,19 @@ const App = () => {
     const body = {
       values: [values],
     };
-    setLoading(true);
-    fetch(API_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          setToken("");
-          setLoading(false);
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Clearing cart after successful response:", data);
-        const newCart = {};
-        Object.keys(potions).forEach((key) => {
-          newCart[key] = 0;
-        });
-        setCart(newCart);
-        setPaymentMethod("cash");
-        setReference("");
-        setNotes("");
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error appending data:", error);
-        setToken("");
-        setLoading(false);
-      });
+
+    await saveCart(body);
+
+    console.log("Clearing cart after successful response:", data);
+    const newCart = {};
+    Object.keys(inventory.items).forEach((key) => {
+      newCart[key] = 0;
+    });
+    setCart(newCart);
+    setPaymentMethod("cash");
+    setReference("");
+    setNotes("");
+    setLoading(false);
   };
 
   return (
@@ -174,7 +144,7 @@ const App = () => {
             exact="true"
             element={
               <Store
-                potions={potions}
+                potions={inventory.items}
                 cart={cart}
                 notes={notes}
                 paymentMethod={paymentMethod}

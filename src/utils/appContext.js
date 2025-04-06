@@ -10,6 +10,7 @@ export const AppProvider = ({ children }) => {
   const [notes, setNotes] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [loading, setLoading] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   return (
     <AppContext.Provider
@@ -28,6 +29,8 @@ export const AppProvider = ({ children }) => {
         setPaymentMethod,
         loading,
         setLoading,
+        totalPrice,
+        setTotalPrice,
       }}
     >
       {children}

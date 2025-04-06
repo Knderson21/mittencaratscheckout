@@ -1,12 +1,9 @@
-/* eslint-disable max-len */
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 import styles from "./styles.module.scss";
 
 const Login = ({ token, setToken }) => {
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
-      // console.log('tokenResponse:', tokenResponse);
-      // console.log('scope:', tokenResponse.scope);
       setToken(tokenResponse.access_token);
     },
     scope: "https://www.googleapis.com/auth/spreadsheets",
