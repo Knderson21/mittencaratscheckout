@@ -12,7 +12,24 @@ export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   return (
-    <AppContext.Provider value={{ token, setToken, inventory, setInventory }}>
+    <AppContext.Provider
+      value={{
+        token,
+        setToken,
+        inventory,
+        setInventory,
+        cart,
+        setCart,
+        reference,
+        setReference,
+        notes,
+        setNotes,
+        paymentMethod,
+        setPaymentMethod,
+        loading,
+        setLoading,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
