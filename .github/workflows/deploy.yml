@@ -26,6 +26,8 @@ jobs:
       run: npm run build
       env:
         REACT_APP_OAUTH_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
+        REACT_APP_SHEET_ID: ${{ secrets.SHEET_ID }}
+        REACT_APP_SHEET_NAME: ${{ secrets.SHEET_NAME }}
     - name: Set Artifact
       id: deployment
       uses: actions/upload-pages-artifact@v3
