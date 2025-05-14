@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
 import {useEffect, useState} from 'react';
 import {Routes, Route, HashRouter} from 'react-router-dom';
-import {Login, Header, Store} from './components/pages';
+import Login, {useLogin, getWithExpiry} from './components/pages/Login';
+import {Header, Store} from './components/pages';
 import storedInventory from './constants/inventory.json';
 
 import './App.scss';
@@ -10,68 +11,55 @@ const App = () => {
   const [token, setToken] = useState('');
   const [inventory, setInventory] = useState({});
   const [cart, setCart] = useState({});
-  const [sheetId, setSheetId] = useState('');
-  const [sheetName, setSheetName] = useState('');
   const [reference, setReference] = useState('');
   const [notes, setNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [loading, setLoading] = useState(false);
 
+  const sheetId = process.env.REACT_APP_SHEET_ID;
+  const sheetName = process.env.REACT_APP_SHEET_NAME;
   const basename = '/';
   // const basename = process.env.NODE_ENV === 'production' ? '/' : '';
   // const basename = process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : '';
 
+  const {login} = useLogin(setToken);
+
+  // Sets everything up initially
   useEffect(() => {
     setInventory({...storedInventory});
-    const storedSheetId = localStorage.getItem('potionSheetId');
-    const storedSheetName = localStorage.getItem('potionSheetName');
     const storedPaymentMethod = localStorage.getItem('potionPaymentMethod');
     const storedNotes = localStorage.getItem('potionNotes');
     const storedReference = localStorage.getItem('potionReference');
     const storedToken = localStorage.getItem('potionToken');
 
-    // console.log('storedSheetId', storedSheetId, typeof storedSheetId);
-    // console.log('storedSheetName', storedSheetName, typeof storedSheetName);
-    // console.log('storedPaymentMethod', storedPaymentMethod, typeof storedPaymentMethod);
-
-    if (storedSheetId) setSheetId(storedSheetId);
-    if (storedSheetName) setSheetName(storedSheetName);
     if (storedPaymentMethod) setPaymentMethod(storedPaymentMethod);
     if (storedNotes) setNotes(storedNotes);
     if (storedReference) setReference(storedReference);
     if (storedToken) setToken(storedToken);
   }, []);
 
+  // Sets cart to local storage
   useEffect(() => {
     if (Object.keys(cart).length === 0) return;
     localStorage.setItem('potionCart', JSON.stringify(cart));
   }, [cart]);
 
-  useEffect(() => {
-    localStorage.setItem('potionSheetId', sheetId);
-  }, [sheetId]);
-
-  useEffect(() => {
-    localStorage.setItem('potionSheetName', sheetName);
-  }, [sheetName]);
-
+  // Sets payment method to local storage
   useEffect(() => {
     localStorage.setItem('potionPaymentMethod', paymentMethod);
   }, [paymentMethod]);
 
+  // Sets notes to local storage
   useEffect(() => {
     localStorage.setItem('potionNotes', notes);
   }, [notes]);
 
+  // Sets reference to local storage
   useEffect(() => {
     localStorage.setItem('potionReference', reference);
   }, [reference]);
 
-  useEffect(() => {
-    localStorage.setItem('potionToken', token);
-  }, [token]);
-
-
+  // Sets up cart
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem('potionCart'));
     if (storedCart) {
@@ -111,15 +99,8 @@ const App = () => {
           <Route
             path="/*"
             element={<Login
-              potions={potions}
-              cart={cart}
               token={token}
-              sheetId={sheetId}
-              sheetName={sheetName}
-              setCart={setCart}
               setToken={setToken}
-              setSheetId={setSheetId}
-              setSheetName={setSheetName}
             />}
           />
         </Routes>
@@ -128,6 +109,13 @@ const App = () => {
   }
 
   const appendSheetData = () => {
+    // Check if the token is valid
+    if (!getWithExpiry('potionToken')) {
+      window.alert('Auth token is invalid! Please resign in with Google to continue checkout.');
+      login();
+      return;
+    }
+
     const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}:append?valueInputOption=USER_ENTERED`;
 
     if (!window.confirm('Are you sure you want to checkout?')) {
@@ -141,7 +129,7 @@ const App = () => {
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      hour12: true, // Set to false if you want 24-hour time format
+      hour12: true, // Set to false for a 24-hour time format
     });
 
     const values = [date, reference];
@@ -175,10 +163,6 @@ const App = () => {
         .then((response) => {
           if (!response.ok) {
             setToken('');
-            // if (response.status === 401) {
-            //   setToken('');
-            //   throw new Error('Unauthorized access - possibly invalid token');
-            // }
             setLoading(false);
             throw new Error('Network response was not ok ' + response.statusText);
           }
@@ -236,15 +220,8 @@ const App = () => {
               exact='true'
               element={
                 <Login
-                  potions={potions}
-                  cart={cart}
                   token={token}
-                  sheetId={sheetId}
-                  sheetName={sheetName}
-                  setCart={setCart}
                   setToken={setToken}
-                  setSheetId={setSheetId}
-                  setSheetName={setSheetName}
                 />}
             />
             <Route path='/test' element={<div>Test</div>} />
