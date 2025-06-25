@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import {useEffect, useState} from 'react';
-import {Routes, Route, HashRouter} from 'react-router-dom';
-import Login, {useLogin, getWithExpiry} from './components/pages/Login';
+import {Routes, Route, useNavigate} from 'react-router-dom';
+import Login, {getWithExpiry} from './components/pages/Login';
 import {Header, Store} from './components/pages';
 import storedInventory from './constants/inventory.json';
 
@@ -18,11 +18,10 @@ const App = () => {
 
   const sheetId = process.env.REACT_APP_SHEET_ID;
   const sheetName = process.env.REACT_APP_SHEET_NAME;
-  const basename = '/';
   // const basename = process.env.NODE_ENV === 'production' ? '/' : '';
   // const basename = process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : '';
 
-  const {login} = useLogin(setToken);
+  const navigate = useNavigate();
 
   // Sets everything up initially
   useEffect(() => {
@@ -94,17 +93,15 @@ const App = () => {
 
   if (!token) {
     return (
-      <HashRouter basename={basename}>
-        <Routes>
-          <Route
-            path="/*"
-            element={<Login
-              token={token}
-              setToken={setToken}
-            />}
-          />
-        </Routes>
-      </HashRouter>
+      <Routes>
+        <Route
+          path="/*"
+          element={<Login
+            token={token}
+            setToken={setToken}
+          />}
+        />
+      </Routes>
     );
   }
 
@@ -112,16 +109,16 @@ const App = () => {
     // Check if the token is valid
     if (!getWithExpiry('potionToken')) {
       window.alert('Auth token is invalid! Please resign in with Google to continue checkout.');
-      login();
+      setToken('');
+      navigate('/');
       return;
     }
-
-    const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}:append?valueInputOption=USER_ENTERED`;
 
     if (!window.confirm('Are you sure you want to checkout?')) {
       return;
     }
 
+    const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}:append?valueInputOption=USER_ENTERED`;
     const timestamp = new Date();
     const date = timestamp.toLocaleString('en-US', {
       year: 'numeric',
@@ -191,43 +188,41 @@ const App = () => {
     <div
       className="appContainer"
     >
-      <HashRouter basename={basename}>
-        <div className="pageContainer">
-          <Header />
-          <Routes>
-            <Route
-              path='/'
-              exact='true'
-              element={
-                <Store
-                  potions={potions}
-                  cart={cart}
-                  notes={notes}
-                  paymentMethod={paymentMethod}
-                  reference={reference}
-                  setCart={setCart}
-                  setNotes={setNotes}
-                  setPaymentMethod={setPaymentMethod}
-                  setReference={setReference}
-                  appendSheetData={appendSheetData}
-                  totalPrice={totalPrice}
-                  loading={loading}
-                />
-              }
-            />
-            <Route
-              path='/settings'
-              exact='true'
-              element={
-                <Login
-                  token={token}
-                  setToken={setToken}
-                />}
-            />
-            <Route path='/test' element={<div>Test</div>} />
-          </Routes>
-        </div>
-      </HashRouter>
+      <div className="pageContainer">
+        <Header />
+        <Routes>
+          <Route
+            path='/'
+            exact='true'
+            element={
+              <Store
+                potions={potions}
+                cart={cart}
+                notes={notes}
+                paymentMethod={paymentMethod}
+                reference={reference}
+                setCart={setCart}
+                setNotes={setNotes}
+                setPaymentMethod={setPaymentMethod}
+                setReference={setReference}
+                appendSheetData={appendSheetData}
+                totalPrice={totalPrice}
+                loading={loading}
+              />
+            }
+          />
+          <Route
+            path='/settings'
+            exact='true'
+            element={
+              <Login
+                token={token}
+                setToken={setToken}
+              />}
+          />
+          <Route path='/test' element={<div>Test</div>} />
+        </Routes>
+      </div>
     </div>
   );
 };
