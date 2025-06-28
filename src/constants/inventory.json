@@ -1,7 +1,7 @@
 {
   "items": {
-    "1": {"name": "Raffle Ticket", "price": 5, "id": "1"},
-    "2": {"name": "10 Tickets (both full sets)", "price": 50, "id": "2"},
+    "1": {"name": "Raffle Ticket", "price": 3, "id": "1"},
+    "2": {"name": "10 Tickets (both full sets)", "price": 17, "id": "2"},
     "3": {"name": "Keychain", "price": 8, "id": "3"},
     "4": {"name": "Keychain Deal (Buy 3 get 1 free)", "price": 24, "id": "4"},
     "5": {"name": "Shaker Keychain - Tent with Charms", "price": 17, "id": "5"},
