@@ -8,6 +8,7 @@ const radioClassName = (paymentMethod, value) => {
     return styles.radio;
   }
 };
+
 const PaymentMethod = ({
   notes,
   paymentMethod,
@@ -31,7 +32,6 @@ const PaymentMethod = ({
           />
         Cash
         </label>
-
         <label
           className={radioClassName(paymentMethod, 'paypal')}
         >
@@ -44,7 +44,6 @@ const PaymentMethod = ({
           />
         Paypal
         </label>
-
         <label
           className={radioClassName(paymentMethod, 'venmo')}
         >
@@ -57,7 +56,6 @@ const PaymentMethod = ({
           />
         Venmo
         </label>
-
         <label
           className={radioClassName(paymentMethod, 'apple cash')}
         >
@@ -70,7 +68,6 @@ const PaymentMethod = ({
           />
           AppleCash
         </label>
-
         <label
           className={radioClassName(paymentMethod, 'cash app')}
         >
@@ -83,7 +80,6 @@ const PaymentMethod = ({
           />
           CashApp
         </label>
-
         <label
           className={radioClassName(paymentMethod, 'zelle')}
         >
@@ -95,6 +91,16 @@ const PaymentMethod = ({
             onChange={() => setPaymentMethod('zelle')}
           />
           Zelle
+        </label>
+        <label className={radioClassName(paymentMethod, 'micah')}>
+          <input
+            type="radio"
+            name="payment"
+            value="micah"
+            checked={paymentMethod === 'micah'}
+            onChange={() => setPaymentMethod('micah')}
+          />
+          Micah
         </label>
       </form>
       <div className={styles.inputWrapper}>
