@@ -1,16 +1,16 @@
-import Potion from '../Potion';
+import Product from '../Product';
 import styles from './styles.module.scss';
 
-const Inventory = ({cart, potions, setCart}) => {
+const Inventory = ({cart, items, setCart}) => {
   return (
     <div className={styles.inventoryContainer}>
       <div className={styles.inventory}>
-        {Object.keys(potions).map((key) => {
-          const potion = potions[key];
+        {Object.keys(items).map((key) => {
+          const product = items[key];
           return (
-            <Potion
-              potion={potion}
-              key={potion.name}
+            <Product
+              product={product}
+              key={product.name}
               cart={cart}
               setCart={setCart}
             />

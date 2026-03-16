@@ -9,7 +9,7 @@ export const useLogin = (setToken) => {
       // eslint-disable-next-line camelcase
       const {access_token, expires_in} = tokenResponse;
       setToken(access_token);
-      setWithExpiry('potionToken', access_token, expires_in);
+      setWithExpiry('authToken', access_token, expires_in);
     },
     scope: 'https://www.googleapis.com/auth/spreadsheets',
   });

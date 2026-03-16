@@ -142,7 +142,7 @@ const Checkout = ({appendSheetData, clearCart, loading}) => {
 const Store = ({
   cart,
   notes,
-  potions,
+  items,
   paymentMethod,
   reference,
   setCart,
@@ -153,13 +153,13 @@ const Store = ({
   totalPrice,
   loading,
 }) => {
-  if (!potions || !cart) {
+  if (!items || !cart) {
     return null;
   }
   const clearCart = () => {
     if (window.confirm('Are you sure you want to clear cart?')) {
       const newCart = {};
-      Object.keys(potions).forEach((key) => {
+      Object.keys(items).forEach((key) => {
         newCart[key] = 0;
       });
       setCart(newCart);
@@ -172,8 +172,8 @@ const Store = ({
   return (
     <div className={styles.storeContainer}>
       <div className={styles.inventoryContainer}>
-        <Cart cart={cart} potions={potions} totalPrice={totalPrice} />
-        <Inventory potions={potions} cart={cart} setCart={setCart} />
+        <Cart cart={cart} items={items} totalPrice={totalPrice} />
+        <Inventory items={items} cart={cart} setCart={setCart} />
         <PaymentMethod
           notes={notes}
           paymentMethod={paymentMethod}

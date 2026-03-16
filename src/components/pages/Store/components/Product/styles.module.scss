@@ -1,8 +1,8 @@
 @import 'src/constants/colors.scss';
 
-.potion {
+.product {
   position: relative;
-  // background-color: $potionBackgroundColor;
+  // background-color: $productBackgroundColor;
   height: 150px;
   width: 125px;
   border-radius: 15px;
@@ -67,7 +67,7 @@
     }
 
     .subtract, .add {
-      -webkit-user-select: none; /* Safari */        
+      -webkit-user-select: none; /* Safari */
       -moz-user-select: none; /* Firefox */
       -ms-user-select: none; /* IE10+/Edge */
       user-select: none; /* Standard */
@@ -84,11 +84,11 @@
     }
 
     .subtract {
-      border-right: 2px solid $potionBackgroundColor;
+      border-right: 2px solid $productBackgroundColor;
     }
 
     .add {
-      border-left: 2px solid $potionBackgroundColor;
+      border-left: 2px solid $productBackgroundColor;
     }
   }
 }
