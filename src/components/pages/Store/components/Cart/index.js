@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 
-const Cart = ({cart, potions, totalPrice}) => {
+const Cart = ({cart, items, totalPrice}) => {
   return (
     <div className={styles.cartContainer}>
       <div className={styles.cartList}>
@@ -12,7 +12,7 @@ const Cart = ({cart, potions, totalPrice}) => {
             }
             return (
               <li key={key}>
-                {cart[key]} x {potions[key].name}
+                {cart[key]} x {items[key].name}
               </li>
             );
           })}

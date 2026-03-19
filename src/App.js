@@ -26,10 +26,10 @@ const App = () => {
   // Sets everything up initially
   useEffect(() => {
     setInventory({...storedInventory});
-    const storedPaymentMethod = localStorage.getItem('potionPaymentMethod');
-    const storedNotes = localStorage.getItem('potionNotes');
-    const storedReference = localStorage.getItem('potionReference');
-    const storedToken = localStorage.getItem('potionToken');
+    const storedPaymentMethod = localStorage.getItem('paymentMethod');
+    const storedNotes = localStorage.getItem('notes');
+    const storedReference = localStorage.getItem('reference');
+    const storedToken = localStorage.getItem('authToken');
 
     if (storedPaymentMethod) setPaymentMethod(storedPaymentMethod);
     if (storedNotes) setNotes(storedNotes);
@@ -40,27 +40,27 @@ const App = () => {
   // Sets cart to local storage
   useEffect(() => {
     if (Object.keys(cart).length === 0) return;
-    localStorage.setItem('potionCart', JSON.stringify(cart));
+    localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
   // Sets payment method to local storage
   useEffect(() => {
-    localStorage.setItem('potionPaymentMethod', paymentMethod);
+    localStorage.setItem('paymentMethod', paymentMethod);
   }, [paymentMethod]);
 
   // Sets notes to local storage
   useEffect(() => {
-    localStorage.setItem('potionNotes', notes);
+    localStorage.setItem('notes', notes);
   }, [notes]);
 
   // Sets reference to local storage
   useEffect(() => {
-    localStorage.setItem('potionReference', reference);
+    localStorage.setItem('reference', reference);
   }, [reference]);
 
   // Sets up cart
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem('potionCart'));
+    const storedCart = JSON.parse(localStorage.getItem('cart'));
     if (storedCart) {
       setCart(storedCart);
       return;
@@ -83,10 +83,10 @@ const App = () => {
     return null;
   }
 
-  const potions = inventory.items;
+  const items = inventory.items;
   let totalPrice = 0;
   Object.keys(cart).forEach((key) => {
-    totalPrice += potions[key].price * cart[key];
+    totalPrice += items[key].price * cart[key];
   });
 
   totalPrice = totalPrice.toFixed(2);
@@ -107,7 +107,7 @@ const App = () => {
 
   const appendSheetData = () => {
     // Check if the token is valid
-    if (!getWithExpiry('potionToken')) {
+    if (!getWithExpiry('authToken')) {
       window.alert('Auth token is invalid! Please resign in with Google to continue checkout.');
       setToken('');
       navigate('/');
@@ -134,7 +134,7 @@ const App = () => {
     let totalQuantity = 0;
     Object.keys(cart).forEach((key) => {
       totalQuantity += cart[key];
-      values.push(`$${(potions[key].price * cart[key]).toFixed(2)}`);
+      values.push(`$${(items[key].price * cart[key]).toFixed(2)}`);
       values.push(cart[key]);
     });
 
@@ -168,7 +168,7 @@ const App = () => {
         .then((data) => {
           console.log('Clearing cart after successful response:', data);
           const newCart = {};
-          Object.keys(potions).forEach((key) => {
+          Object.keys(items).forEach((key) => {
             newCart[key] = 0;
           });
           setCart(newCart);
@@ -196,7 +196,7 @@ const App = () => {
             exact='true'
             element={
               <Store
-                potions={potions}
+                potions={items}
                 cart={cart}
                 notes={notes}
                 paymentMethod={paymentMethod}
