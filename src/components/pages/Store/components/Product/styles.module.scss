@@ -2,11 +2,9 @@
 
 .product {
   position: relative;
-  // background-color: $productBackgroundColor;
   height: 150px;
   width: 125px;
   border-radius: 15px;
-  // overflow: hidden;
 
   scroll-snap-align: start;
   padding: 5px 5px 0;
@@ -15,12 +13,9 @@
   flex-direction: column;
   text-align: center;
   border: 2px solid $backgroundColor;
-  // filter: drop-shadow(0px 5px 3px rgba(0, 0, 0, 0.3));
-  // z-index: 1;
 
   h3 {
     font-size: 12px;
-    // font-weight: normal;
     z-index: 1;
     margin: 0;
     background-color: rgba(255, 255, 255, 0.5);
@@ -29,9 +24,7 @@
 
   img {
     position: absolute;
-    // top border radius 15px
     border-radius: 15px 15px 0 0;
-    // bottom: 30px;
     top: 0;
     left: 0;
     width: 100%;
@@ -50,8 +43,8 @@
     background-color: $backgroundColor;
     border-radius: 0 0 10px 10px;
     overflow: hidden;
-    // z-index: 1;
 
+    /* Hide the browser's built-in number input spinner arrows */
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;

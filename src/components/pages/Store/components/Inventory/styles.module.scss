@@ -5,7 +5,6 @@
   width: 100%;
   border-radius: 15px;
   box-sizing: border-box;
-  width: 100%;
   padding: 15px;
   background-color: $inventoryBackgroundColor;
   filter: drop-shadow(0px 15px 7px rgba(0, 0, 0, 0.3));
@@ -15,14 +14,13 @@
 
 .inventory {
   display: grid;
-  grid-auto-flow: column;  // This will ensure the grid fills column-wise
-  grid-template-rows: repeat(2, 150px); // Exactly two rows
-  gap: 15px; // Space between items
+  grid-auto-flow: column;  // Fill the grid column-by-column (left to right)
+  grid-template-rows: repeat(2, 150px); // Two fixed-height rows of product tiles
+  gap: 15px;
   overflow-x: auto;
-  width: 100%; // Adjust based on the container's width or set a specific max-width if needed
-  // height: 310px; // Height is calculated to fit exactly two rows, considering the gap
+  width: 100%;
 
-  scroll-snap-type: mandatory;
+  // x mandatory snaps scrolling so tiles land cleanly at the left edge
   scroll-snap-type: x mandatory;
   padding-bottom: 10px;
 }

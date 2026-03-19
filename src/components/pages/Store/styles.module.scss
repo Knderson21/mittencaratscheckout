@@ -2,20 +2,14 @@
 @import 'src/constants/dimensions.scss';
 
 .storeContainer {
-  display: flex;
   height: calc(100svh - $headerHeight);
-  // overflow-y: auto;
   box-sizing: border-box;
-  // padding: 15px;
-  // padding-top: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  // z-index: 1;
 }
 
 .inventoryContainer {
-  display: flex;
   height: calc(100% - $footerHeight);
   overflow-y: auto;
   box-sizing: border-box;
@@ -36,7 +30,7 @@
   border-radius: 15px;
   box-sizing: border-box;
   filter: drop-shadow(0px 15px 7px rgba(0, 0, 0, 0.3));
-  margin-bottom: 15px;;
+  margin-bottom: 15px;
   z-index: 1;
 
   form {
@@ -93,7 +87,6 @@
 
   .cancel {
     font-weight: bold;
-    color: $accentColor;
     color: $darkTextColor;
     background-color: $backgroundColor;
     border: 3px solid $productBackgroundColor;
@@ -102,7 +95,6 @@
 
   .checkout {
     font-weight: bold;
-    color: $accentColor;
     color: $darkTextColor;
     background-color: $inventoryBackgroundColor;
     border: 3px solid $accentColor;
@@ -117,10 +109,6 @@
   }
 
   .paymentMethodContainer {
-    // .inputWrapper {
-    //   justify-content: flex-start;
-    // }
-
     form {
       justify-content: flex-start;
       gap: 20px;

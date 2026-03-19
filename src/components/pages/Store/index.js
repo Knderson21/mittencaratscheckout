@@ -1,6 +1,8 @@
 import {Cart, Inventory} from './components';
 import styles from './styles.module.scss';
 
+// Returns the CSS class string for a payment method radio button label.
+// Combines the base `radio` style with `activeRadio` when this option is selected.
 const radioClassName = (paymentMethod, value) => {
   if (paymentMethod === value) {
     return [styles.radio, styles.activeRadio].join(' ');
@@ -9,6 +11,12 @@ const radioClassName = (paymentMethod, value) => {
   }
 };
 
+// PaymentMethod renders the payment type selector (radio buttons) and the
+// cashier name / notes text inputs.
+//
+// All inputs are "controlled" — React owns the state (via props), and every
+// change calls a setter to push the new value back up to App.js. This is
+// the opposite of uncontrolled inputs where the DOM holds the value.
 const PaymentMethod = ({
   notes,
   paymentMethod,
@@ -19,6 +27,8 @@ const PaymentMethod = ({
 }) => {
   return (
     <div className={styles.paymentMethodContainer}>
+      {/* Radio group — `checked` is driven by the paymentMethod prop,
+          and onChange calls the setter passed down from App.js */}
       <form>
         <label
           className={radioClassName(paymentMethod, 'cash')}
@@ -103,6 +113,8 @@ const PaymentMethod = ({
           Micah
         </label>
       </form>
+      {/* Controlled text inputs — value is driven by props, onChange pushes
+          the typed string back up to App.js via the setter */}
       <div className={styles.inputWrapper}>
         <textarea
           type="text"
@@ -126,6 +138,8 @@ const PaymentMethod = ({
   );
 };
 
+// Checkout renders the action buttons fixed at the bottom of the page.
+// Both buttons are disabled while the Sheets API call is in-flight (loading).
 const Checkout = ({appendSheetData, clearCart, loading}) => {
   return (
     <div className={styles.checkoutContainer}>
@@ -145,6 +159,8 @@ const Checkout = ({appendSheetData, clearCart, loading}) => {
   );
 };
 
+// Store is the main page component. It composes Cart, Inventory, PaymentMethod,
+// and Checkout, and owns the clearCart action (manual cancel by the cashier).
 const Store = ({
   cart,
   notes,
@@ -159,9 +175,15 @@ const Store = ({
   totalPrice,
   loading,
 }) => {
+  // Safety guard — shouldn't be reached due to the isReady check in App.js,
+  // but prevents a crash if items or cart are ever undefined.
   if (!items || !cart) {
     return null;
   }
+
+  // clearCart resets all quantities to 0 and clears the form fields.
+  // This is the manual "cancel" flow — separate from the post-checkout reset
+  // that lives in useCheckout, though they produce the same end state.
   const clearCart = () => {
     if (window.confirm('Are you sure you want to clear cart?')) {
       const newCart = {};
@@ -177,6 +199,8 @@ const Store = ({
 
   return (
     <div className={styles.storeContainer}>
+      {/* Scrollable content area containing the cart summary, product grid,
+          and payment/notes form */}
       <div className={styles.inventoryContainer}>
         <Cart cart={cart} items={items} totalPrice={totalPrice} />
         <Inventory items={items} cart={cart} setCart={setCart} />
@@ -189,6 +213,7 @@ const Store = ({
           setReference={setReference}
         />
       </div>
+      {/* Fixed footer bar with Cancel and Checkout buttons */}
       <Checkout
         clearCart={clearCart}
         appendSheetData={appendSheetData}

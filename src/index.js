@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -7,9 +6,18 @@ import reportWebVitals from './reportWebVitals';
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import {HashRouter} from 'react-router-dom';
 
+// The OAuth client ID is stored in .env as REACT_APP_OAUTH_CLIENT_ID.
+// It identifies this app to Google's auth servers.
+const oauth = process.env.REACT_APP_OAUTH_CLIENT_ID;
+
+// HashRouter uses hash-based URLs (e.g. /#/settings instead of /settings).
+// This lets GitHub Pages serve the app without server-side routing config —
+// the server only needs to serve index.html; routing is handled client-side.
+//
+// GoogleOAuthProvider wraps the entire app so any component can access
+// Google OAuth functionality (via @react-oauth/google hooks) without extra setup.
 const basename = '/';
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const oauth = process.env.REACT_APP_OAUTH_CLIENT_ID;
 root.render(
     <GoogleOAuthProvider clientId={oauth}>
       <HashRouter basename={basename}>
@@ -18,7 +26,4 @@ root.render(
     </GoogleOAuthProvider>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example, reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
