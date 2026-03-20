@@ -3,8 +3,10 @@
 // Responsibilities:
 //   1. Hold the Google OAuth token in state (single source of truth for auth)
 //   2. Instantiate all three business-logic hooks and compose their state
-//   3. Act as an auth gate — render Login for all routes when no token is present
-//   4. Pass state and setters down to child components via props (no Context API)
+//   3. Act as an auth gate — render Login for all routes when no
+//      token is present
+//   4. Pass state and setters down to child components via props
+//      (no Context API)
 import {useEffect, useState} from 'react';
 import {Routes, Route, useNavigate} from 'react-router-dom';
 import Login from './components/pages/Login';
@@ -107,7 +109,8 @@ const App = () => {
               />
             }
           />
-          {/* /settings reuses the Login component so staff can refresh an expired token */}
+          {/* /settings reuses the Login component so staff can */}
+          {/* refresh an expired token */}
           <Route
             path='/settings'
             exact='true'

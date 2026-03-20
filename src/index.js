@@ -15,7 +15,8 @@ const oauth = process.env.REACT_APP_OAUTH_CLIENT_ID;
 // the server only needs to serve index.html; routing is handled client-side.
 //
 // GoogleOAuthProvider wraps the entire app so any component can access
-// Google OAuth functionality (via @react-oauth/google hooks) without extra setup.
+// Google OAuth functionality (via @react-oauth/google hooks) without
+// extra setup.
 const basename = '/';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

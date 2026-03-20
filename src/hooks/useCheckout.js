@@ -3,21 +3,26 @@ import {getWithExpiry} from '../components/pages/Login';
 import postOrder from '../services/sheetsApi';
 
 /**
- * Manages the checkout flow — the only place in the app that calls the Sheets API.
+ * Manages the checkout flow — the only place in the app that calls
+ * the Sheets API.
  *
  * Parameters are passed from App.js because useCheckout needs to read cart
  * and form state at submit time, and reset them after a successful order.
  *
  * @param {object} params
- * @param {string} params.token - Google OAuth access token used to authorize the Sheets request
- * @param {function(string): void} params.setToken - Setter to clear the token on auth failure
- * @param {{ [id: string]: { id: string, name: string, price: number } }} params.items - Product catalog
- * @param {{ [id: string]: number }} params.cart - Current cart quantities keyed by product ID
- * @param {function(object): void} params.setCart - Setter to reset the cart after checkout
- * @param {string} params.totalPrice - Formatted total string, e.g. "14.00" (no $ sign)
- * @param {object} params.orderForm - The full orderForm object returned by useOrderForm
- * @param {function(string): void} params.navigate - React Router navigate function for redirects
- * @returns {{ appendSheetData: function(): void, loading: boolean }}
+ * @param {string} params.token - Google OAuth access token used to
+ *   authorize the Sheets request
+ * @param {function(string): void} params.setToken - Setter to clear
+ *   the token on auth failure
+ * @param {object} params.items - Product catalog keyed by product ID
+ * @param {object} params.cart - Current cart quantities keyed by product ID
+ * @param {function(object): void} params.setCart - Setter to reset the
+ *   cart after checkout
+ * @param {string} params.totalPrice - Formatted total, e.g. "14.00"
+ * @param {object} params.orderForm - The orderForm object from useOrderForm
+ * @param {function(string): void} params.navigate - React Router navigate
+ *   function for redirects
+ * @return {object} appendSheetData function and loading boolean
  */
 const useCheckout = ({
   token, setToken, items, cart, setCart, totalPrice, orderForm, navigate,
@@ -123,7 +128,7 @@ const useCheckout = ({
         .catch((error) => {
           // Step 7: Any error clears the token to force re-authentication.
           // The assumption is that most errors are auth-related (expired token,
-          // revoked access). Check the browser network tab for the actual cause.
+          // revoked access). Check the browser network tab for the cause.
           console.error('Error appending data:', error);
           setToken('');
           setLoading(false);

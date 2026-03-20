@@ -2,11 +2,15 @@
  * Appends a single row of values to a Google Sheets tab.
  * Thin wrapper around the Google Sheets API v4 append endpoint.
  *
- * @param {string} token - Google OAuth access token (set by Login, stored in localStorage)
- * @param {string} sheetId - Spreadsheet ID from the Google Sheets URL (CI env var)
- * @param {string} sheetName - Name of the tab to append to, e.g. "Orders" (CI env var)
- * @param {Array<string|number>} rowValues - Positional array of values to write as a new row
- * @returns {Promise<Response>} The raw fetch Response — caller handles ok/error
+ * @param {string} token - Google OAuth access token (set by Login,
+ *   stored in localStorage)
+ * @param {string} sheetId - Spreadsheet ID from the Google Sheets
+ *   URL (CI env var)
+ * @param {string} sheetName - Name of the tab to append to,
+ *   e.g. "Orders" (CI env var)
+ * @param {Array<string|number>} rowValues - Positional array of
+ *   values to write as a new row
+ * @return {Promise<Response>} The raw fetch Response — caller handles ok/error
  */
 const postOrder = (token, sheetId, sheetName, rowValues) => {
   // valueInputOption=USER_ENTERED tells Sheets to parse values the same way a

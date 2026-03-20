@@ -7,7 +7,8 @@ import styles from './styles.module.scss';
 // Props:
 //   items   - { [productId]: { name, price, id } } — the full product catalog
 //   cart    - { [productId]: quantity } — passed through to each Product tile
-//   setCart - setter from useCart — passed through so Product can update quantities
+//   setCart - setter from useCart — passed through so Product can
+//            update quantities
 const Inventory = ({cart, items, setCart}) => {
   return (
     <div className={styles.inventoryContainer}>

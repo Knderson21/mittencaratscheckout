@@ -2,7 +2,8 @@ import {Cart, Inventory} from './components';
 import styles from './styles.module.scss';
 
 // Returns the CSS class string for a payment method radio button label.
-// Combines the base `radio` style with `activeRadio` when this option is selected.
+// Combines the base `radio` style with `activeRadio` when this option
+// is selected.
 const radioClassName = (paymentMethod, value) => {
   if (paymentMethod === value) {
     return [styles.radio, styles.activeRadio].join(' ');

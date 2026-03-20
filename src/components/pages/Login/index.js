@@ -30,7 +30,7 @@ export const useLogin = (setToken) => {
  * @param {string} key - The localStorage key to write to (e.g. "authToken")
  * @param {string} value - The value to store (the OAuth access token string)
  * @param {number} ttl - Time-to-live in seconds (Google returns this as `expires_in`)
- * @returns {void}
+ * @return {void}
  */
 export const setWithExpiry = (key, value, ttl) => {
   const item = {
@@ -47,7 +47,7 @@ export const setWithExpiry = (key, value, ttl) => {
  * Called by useCheckout at submit time to validate the token before posting.
  *
  * @param {string} key - The localStorage key to read (e.g. "authToken")
- * @returns {string|null} The stored token string, or null if missing/expired
+ * @return {string|null} The stored token string, or null if missing/expired
  */
 export const getWithExpiry = (key) => {
   const itemStr = localStorage.getItem(key);

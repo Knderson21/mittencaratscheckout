@@ -6,7 +6,8 @@ import {useEffect, useState} from 'react';
 //   - paymentMethod: how the customer is paying (default: 'cash')
 //
 // All three are persisted in localStorage so they survive page refreshes.
-// Each field syncs independently so one change never triggers unnecessary writes.
+// Each field syncs independently so one change never triggers
+// unnecessary writes.
 const useOrderForm = () => {
   const [reference, setReference] = useState('');
   const [notes, setNotes] = useState('');
@@ -39,7 +40,8 @@ const useOrderForm = () => {
   }, [reference]);
 
   // resetForm is called by useCheckout after a successful order submission.
-  // It returns all fields to their defaults so the form is ready for the next sale.
+  // It returns all fields to their defaults so the form is ready
+  // for the next sale.
   const resetForm = () => {
     setPaymentMethod('cash');
     setReference('');
