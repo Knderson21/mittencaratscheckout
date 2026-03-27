@@ -22,10 +22,13 @@ import postOrder from '../services/sheetsApi';
  * @param {object} params.orderForm - The orderForm object from useOrderForm
  * @param {function(string): void} params.navigate - React Router navigate
  *   function for redirects
+ * @param {function(object): void} params.decrementStock - Reduces stock counts
+ *   in adminInventory after a successful order
  * @return {object} appendSheetData function and loading boolean
  */
 const useCheckout = ({
   token, setToken, items, cart, setCart, totalPrice, orderForm, navigate,
+  decrementStock,
 }) => {
   // loading is true while the Sheets API request is in-flight.
   // It is passed to the Checkout button to show a disabled/loading state
@@ -117,6 +120,9 @@ const useCheckout = ({
         .then((data) => {
           // Step 6: Success — reset cart to all-zero quantities and clear form.
           console.log('Clearing cart after successful response:', data);
+          // Decrement stock counts before clearing the cart, while cart
+          // still holds the sold quantities.
+          decrementStock(cart);
           const newCart = {};
           Object.keys(items).forEach((key) => {
             newCart[key] = 0;

@@ -6,15 +6,29 @@ import storedInventory from '../constants/inventory.json';
 // The cart is a flat map of { [productId]: quantity } where every product ID
 // always has an entry (quantity = 0 means "not in cart"). This consistent shape
 // means components can iterate all products without null checks.
+//
+// adminInventory (localStorage key "adminInventory") stores runtime overrides:
+// edited names/prices/images/stock counts, new products, and deletion markers.
+// It is merged with the bundled JSON at render time — admin values win.
 const useCart = () => {
   const [inventory, setInventory] = useState({});
+  // adminInventory shape:
+  //   { items: { [id]: { id, name, price, stock, image, _deleted? } } }
+  // stock: null = unlimited, number = tracked. _deleted hides a bundled item.
+  const [adminInventory, setAdminInventory] = useState({items: {}});
   const [cart, setCart] = useState({});
 
-  // Load inventory from the bundled JSON file on mount.
-  // useEffect with [] runs exactly once after the first render,
-  // similar to componentDidMount in class components.
+  // Load bundled inventory from JSON on mount.
   useEffect(() => {
     setInventory({...storedInventory});
+  }, []);
+
+  // Load admin inventory overrides from localStorage on mount.
+  useEffect(() => {
+    const stored = localStorage.getItem('adminInventory');
+    if (stored) {
+      setAdminInventory(JSON.parse(stored));
+    }
   }, []);
 
   // Once inventory is loaded, initialize the cart.
@@ -32,9 +46,18 @@ const useCart = () => {
     }
 
     // Otherwise build a fresh cart with every product set to quantity 0.
+    // Also include any admin-added products from localStorage.
     const newCart = {};
     Object.keys(inventory.items).forEach((key) => {
       newCart[key] = 0;
+    });
+    const storedAdmin = JSON.parse(
+        localStorage.getItem('adminInventory') || '{"items":{}}',
+    );
+    Object.keys(storedAdmin.items).forEach((key) => {
+      if (!storedAdmin.items[key]._deleted && !newCart[key]) {
+        newCart[key] = 0;
+      }
     });
     setCart(newCart);
   }, [inventory]);
@@ -47,9 +70,25 @@ const useCart = () => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
-  // Expose inventory.items as a flat map for easier use in child components.
-  // Falls back to {} before inventory loads.
-  const items = inventory.items || {};
+  // Merge bundled inventory with admin overrides.
+  // Admin values (name, price, stock, image) take precedence over bundled.
+  // Items marked _deleted are excluded from the visible catalog.
+  const bundledItems = inventory.items || {};
+  const adminItems = adminInventory.items || {};
+  const mergedItems = {};
+  Object.keys(bundledItems).forEach((key) => {
+    mergedItems[key] = {...bundledItems[key], ...(adminItems[key] || {})};
+  });
+  Object.keys(adminItems).forEach((key) => {
+    if (!mergedItems[key]) {
+      // Admin-added product not in bundled JSON.
+      mergedItems[key] = adminItems[key];
+    }
+  });
+  const items = {};
+  Object.keys(mergedItems).forEach((key) => {
+    if (!mergedItems[key]._deleted) items[key] = mergedItems[key];
+  });
 
   // Calculate the running total across all cart items.
   let totalPrice = 0;
@@ -63,7 +102,113 @@ const useCart = () => {
   const isReady =
     Object.keys(inventory).length > 0 && Object.keys(cart).length > 0;
 
-  return {items, cart, setCart, totalPrice, isReady};
+  // --- Admin CRUD helpers ---
+  // Each function saves the updated adminInventory to localStorage directly
+  // rather than relying on a useEffect, which avoids initialization timing
+  // issues (the sync useEffect would fire before the load useEffect completes).
+
+  // updateInventoryItem merges the given fields into an item's admin override.
+  // Creates an override entry if one doesn't exist yet for that item.
+  const updateInventoryItem = (id, fields) => {
+    const updated = {
+      items: {
+        ...adminItems,
+        [id]: {...(adminItems[id] || {}), ...fields, id},
+      },
+    };
+    setAdminInventory(updated);
+    localStorage.setItem('adminInventory', JSON.stringify(updated));
+  };
+
+  // addInventoryItem assigns the next available numeric ID, saves the new
+  // product to adminInventory, and initializes a cart slot for it.
+  const addInventoryItem = (item) => {
+    const allIds = [
+      ...Object.keys(bundledItems),
+      ...Object.keys(adminItems).filter((k) => !adminItems[k]._deleted),
+    ];
+    const numericIds = allIds.map((k) => parseInt(k, 10)).filter(Boolean);
+    const nextId = String(Math.max(0, ...numericIds) + 1);
+    const newItem = {...item, id: nextId};
+    const updated = {items: {...adminItems, [nextId]: newItem}};
+    setAdminInventory(updated);
+    localStorage.setItem('adminInventory', JSON.stringify(updated));
+    // Initialize a cart slot for the new product so totalPrice stays correct.
+    setCart((prev) => ({...prev, [nextId]: 0}));
+  };
+
+  // removeInventoryItem hides a product from the catalog.
+  // Bundled items get a _deleted marker so they can be restored via
+  // resetToDefaults. Admin-added items are removed outright.
+  const removeInventoryItem = (id) => {
+    const updated = {items: {...adminItems}};
+    if (bundledItems[id]) {
+      // Bundled item: mark as deleted so it's hidden until defaults are reset.
+      updated.items[id] = {...(adminItems[id] || {}), id, _deleted: true};
+    } else {
+      // Admin-added item: remove entirely.
+      delete updated.items[id];
+    }
+    setAdminInventory(updated);
+    localStorage.setItem('adminInventory', JSON.stringify(updated));
+    setCart((prev) => {
+      const next = {...prev};
+      delete next[id];
+      return next;
+    });
+  };
+
+  // decrementStock subtracts sold quantities from stock counts.
+  // Items with stock === null or undefined (unlimited) are not affected.
+  // Called by useCheckout after a successful order.
+  const decrementStock = (cartSnapshot) => {
+    const updatedAdminItems = {...adminItems};
+    Object.keys(cartSnapshot).forEach((key) => {
+      const qty = cartSnapshot[key];
+      if (!qty) return;
+      const existing = updatedAdminItems[key] || {};
+      const bundled = bundledItems[key] || {};
+      const baseStock = existing.stock !== undefined ?
+        existing.stock :
+        (bundled.stock !== undefined ? bundled.stock : null);
+      if (baseStock === null || baseStock === undefined) return;
+      updatedAdminItems[key] = {
+        ...bundled,
+        ...existing,
+        id: key,
+        stock: Math.max(0, baseStock - qty),
+      };
+    });
+    const updated = {items: updatedAdminItems};
+    setAdminInventory(updated);
+    localStorage.setItem('adminInventory', JSON.stringify(updated));
+  };
+
+  // resetToDefaults clears all admin overrides, restoring the bundled catalog.
+  const resetToDefaults = () => {
+    const cleared = {items: {}};
+    setAdminInventory(cleared);
+    localStorage.removeItem('adminInventory');
+    const newCart = {};
+    Object.keys(bundledItems).forEach((key) => {
+      newCart[key] = 0;
+    });
+    setCart(newCart);
+    localStorage.setItem('cart', JSON.stringify(newCart));
+  };
+
+  return {
+    items,
+    cart,
+    setCart,
+    totalPrice,
+    isReady,
+    updateInventoryItem,
+    addInventoryItem,
+    removeInventoryItem,
+    decrementStock,
+    resetToDefaults,
+  };
 };
 
 export default useCart;

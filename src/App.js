@@ -10,7 +10,7 @@
 import {useEffect, useState} from 'react';
 import {Routes, Route, useNavigate} from 'react-router-dom';
 import Login from './components/pages/Login';
-import {Header, Store} from './components/pages';
+import {Admin, Header, Store} from './components/pages';
 import useCart from './hooks/useCart';
 import useOrderForm from './hooks/useOrderForm';
 import useCheckout from './hooks/useCheckout';
@@ -30,7 +30,11 @@ const App = () => {
   // useCart manages the product catalog, cart quantities, and total price.
   // isReady is false until both inventory and cart are initialized — it
   // prevents a flash of empty UI before data loads from localStorage.
-  const {items, cart, setCart, totalPrice, isReady} = useCart();
+  const {
+    items, cart, setCart, totalPrice, isReady,
+    updateInventoryItem, addInventoryItem, removeInventoryItem,
+    decrementStock, resetToDefaults,
+  } = useCart();
 
   // useOrderForm manages the payment method, cashier name (reference), and
   // notes fields. All three are persisted in localStorage automatically.
@@ -49,6 +53,7 @@ const App = () => {
     totalPrice,
     orderForm,
     navigate,
+    decrementStock,
   });
 
   // On mount, restore the auth token from localStorage so the user does not
@@ -115,6 +120,20 @@ const App = () => {
             path='/settings'
             exact='true'
             element={<Login token={token} setToken={setToken} />}
+          />
+          {/* /admin provides product and inventory management */}
+          <Route
+            path='/admin'
+            exact='true'
+            element={
+              <Admin
+                items={items}
+                updateInventoryItem={updateInventoryItem}
+                addInventoryItem={addInventoryItem}
+                removeInventoryItem={removeInventoryItem}
+                resetToDefaults={resetToDefaults}
+              />
+            }
           />
           {/* /test is a placeholder route, not a real test page */}
           <Route path='/test' element={<div>Test</div>} />

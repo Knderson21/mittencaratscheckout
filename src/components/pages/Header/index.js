@@ -20,6 +20,13 @@ const Header = () => {
           <div>Settings</div>
         </NavLink>
         <NavLink
+          to="/admin"
+          exact={'true'}
+          className={({isActive}) => isActive ? [styles.activeLink, styles.navLink].join(' ') : styles.navLink}
+        >
+          <div>Admin</div>
+        </NavLink>
+        <NavLink
           to="/"
           exact={'true'}
           className={({isActive}) => isActive ? [styles.activeLink, styles.navLink].join(' ') : styles.navLink}
